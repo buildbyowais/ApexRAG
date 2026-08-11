@@ -1,11 +1,11 @@
 # ApexRAG
 
-![Python](https://img.shields.io/badge/Python-3.x-3776AB?logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?logo=fastapi&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.x-3776AB?logo=python\&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?logo=fastapi\&logoColor=white)
 ![LangChain](https://img.shields.io/badge/LangChain-RAG-1C3C3C)
 ![ChromaDB](https://img.shields.io/badge/ChromaDB-Vector%20Database-FF6F00)
-![Gemini](https://img.shields.io/badge/Google%20Gemini-LLM-4285F4?logo=google&logoColor=white)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-Frontend-7952B3?logo=bootstrap&logoColor=white)
+![Google Gemini](https://img.shields.io/badge/Google%20Gemini-LLM-4285F4?logo=google\&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-Frontend-7952B3?logo=bootstrap\&logoColor=white)
 
 A document-based **Retrieval-Augmented Generation (RAG)** chatbot that allows users to upload documents and ask questions directly from their content.
 
@@ -15,70 +15,58 @@ ApexRAG processes uploaded documents, creates searchable vector representations,
 
 ## Features
 
-- Upload PDF, DOCX, and TXT documents
-- Automatic text extraction and cleaning
-- Document structure detection
-- Intelligent document chunking
-- Metadata enrichment
-- Hugging Face embeddings
-- ChromaDB vector storage
-- Semantic document retrieval
-- LLM-based answer generation
-- Document-grounded responses
-- Hallucination handling
-- Source and page references
-- Responsive chatbot interface
-- FastAPI REST API
+* Upload PDF, DOCX, and TXT documents
+* Automatic text extraction and cleaning
+* Document structure detection
+* Intelligent document chunking
+* Metadata enrichment
+* Hugging Face embeddings
+* ChromaDB vector storage
+* Semantic document retrieval
+* LLM-based answer generation
+* Document-grounded responses
+* Hallucination handling
+* Source and page references
+* Responsive chatbot interface
+* FastAPI REST API
 
 ---
 
 ## Architecture
 
-```text
-                         User
-                           │
-                           ▼
-                ┌─────────────────────┐
-                │      Frontend       │
-                │ HTML + CSS + JS     │
-                │     Bootstrap       │
-                └──────────┬──────────┘
-                           │
-                           ▼
-                ┌─────────────────────┐
-                │      FastAPI        │
-                │      Backend        │
-                └──────────┬──────────┘
-                           │
-              ┌────────────┴────────────┐
-              │                         │
-              ▼                         ▼
-      ┌────────────────┐       ┌────────────────┐
-      │   Ingestion    │       │   Retrieval    │
-      ├────────────────┤       ├────────────────┤
-      │ Load           │       │ Retriever      │
-      │ Clean          │       │ Prompt         │
-      │ Structure      │       │ LLM            │
-      │ Chunk          │       │ RAG Pipeline   │
-      │ Metadata       │       └───────┬────────┘
-      │ Embeddings     │               │
-      └───────┬────────┘               │
-              │                        │
-              ▼                        │
-       ┌───────────────┐               │
-       │   ChromaDB    │◄──────────────┘
-       │ Vector Store  │
-       └───────────────┘
-              │
-              ▼
-       Answer + Sources
+```
+User
+ │
+ ▼
+Frontend
+(HTML + CSS + JavaScript)
+ │
+ ▼
+FastAPI Backend
+ │
+ ├───────────────┐
+ ▼               ▼
+Ingestion      Retrieval
+ │               │
+ ├─ Load         ├─ Retrieve
+ ├─ Clean        ├─ Prompt
+ ├─ Structure    └─ Generate
+ ├─ Chunk             │
+ ├─ Metadata          │
+ └─ Embeddings        │
+ │                    │
+ ▼                    │
+ChromaDB ◄────────────┘
+ │
+ ▼
+Answer + Sources
 ```
 
 ---
 
 ## Project Structure
 
-```text
+```
 ApexRAG/
 │
 ├── Frontend/
@@ -125,7 +113,7 @@ The user uploads a PDF, DOCX, or TXT document through the frontend.
 
 The document passes through the ingestion pipeline:
 
-```text
+```
 Document
    ↓
 Load
@@ -149,7 +137,7 @@ The user asks a question about the uploaded document.
 
 The question is converted into an embedding and used to retrieve the most relevant document chunks.
 
-```text
+```
 Question
    ↓
 Embedding
@@ -163,7 +151,7 @@ Relevant Chunks
 
 The retrieved context is provided to the LLM together with the user's question.
 
-```text
+```
 Question + Retrieved Context
               ↓
              LLM
@@ -177,7 +165,7 @@ The response includes the document name and page number of the retrieved informa
 
 If the answer cannot be found in the uploaded document, ApexRAG returns:
 
-```text
+```
 I could not find the answer in the provided document.
 ```
 
@@ -185,19 +173,19 @@ I could not find the answer in the provided document.
 
 ## Tech Stack
 
-| Technology | Purpose |
-|---|---|
-| Python | Backend and RAG pipeline |
-| FastAPI | REST API |
-| LangChain | RAG components |
-| Google Gemini | Large Language Model |
-| Hugging Face | Text embeddings |
-| Sentence Transformers | Embedding model |
-| ChromaDB | Vector database |
-| HTML | Frontend structure |
-| CSS | Frontend styling |
-| JavaScript | Frontend functionality |
-| Bootstrap | UI components |
+| Technology            | Purpose                  |
+| --------------------- | ------------------------ |
+| Python                | Backend and RAG pipeline |
+| FastAPI               | REST API                 |
+| LangChain             | RAG components           |
+| Google Gemini         | Large Language Model     |
+| Hugging Face          | Text embeddings          |
+| Sentence Transformers | Embedding model          |
+| ChromaDB              | Vector database          |
+| HTML                  | Frontend structure       |
+| CSS                   | Frontend styling         |
+| JavaScript            | Frontend functionality   |
+| Bootstrap             | UI components            |
 
 ---
 
@@ -205,9 +193,9 @@ I could not find the answer in the provided document.
 
 ApexRAG supports:
 
-- PDF
-- DOCX
-- TXT
+* PDF
+* DOCX
+* TXT
 
 **Maximum file size:** 20 MB
 
@@ -217,34 +205,34 @@ ApexRAG supports:
 
 ### 1. Clone the Repository
 
-```bash
+```
 git clone https://github.com/buildbyowais/ApexRAG.git
 cd ApexRAG
 ```
 
 ### 2. Create a Virtual Environment
 
-```bash
+```
 python -m venv rag_env
 ```
 
 ### 3. Activate the Virtual Environment
 
-#### Windows
+**Windows**
 
-```bash
+```
 rag_env\Scripts\activate
 ```
 
-#### Linux / macOS
+**Linux / macOS**
 
-```bash
+```
 source rag_env/bin/activate
 ```
 
 ### 4. Install Dependencies
 
-```bash
+```
 pip install -r requirements.txt
 ```
 
@@ -252,7 +240,7 @@ pip install -r requirements.txt
 
 Create a `.env` file in the project root:
 
-```env
+```
 GOOGLE_API_KEY=your_api_key_here
 ```
 
@@ -262,23 +250,23 @@ GOOGLE_API_KEY=your_api_key_here
 
 Start the FastAPI server:
 
-```bash
+```
 uvicorn main:app --reload
 ```
 
 The backend will be available at:
 
-```text
+```
 http://127.0.0.1:8000
 ```
 
 FastAPI Swagger documentation:
 
-```text
+```
 http://127.0.0.1:8000/docs
 ```
 
-Open the frontend in your browser, upload a document, and start chatting with it.
+Open the frontend in your browser, upload a document, and start chatting.
 
 ---
 
@@ -286,7 +274,7 @@ Open the frontend in your browser, upload a document, and start chatting with it
 
 ### Upload Document
 
-```http
+```
 POST /documents/upload
 ```
 
@@ -294,7 +282,7 @@ The endpoint uploads and processes a document through the ingestion pipeline.
 
 Example response:
 
-```json
+```
 {
   "message": "Document uploaded successfully.",
   "document_id": "8ad88663-6519-4ddc-a0a9-c15a526891a3",
@@ -305,13 +293,13 @@ Example response:
 
 ### Ask a Question
 
-```http
+```
 POST /chat
 ```
 
 Request:
 
-```json
+```
 {
   "question": "What is the purpose of recruitment?",
   "document_id": "8ad88663-6519-4ddc-a0a9-c15a526891a3"
@@ -320,7 +308,7 @@ Request:
 
 Example response:
 
-```json
+```
 {
   "answer": "The purpose of recruitment is to formulate a team of competent candidates from which the company can select the best employee.",
   "sources": [
@@ -340,7 +328,7 @@ ApexRAG is designed to answer questions using the uploaded document rather than 
 
 When relevant information cannot be found in the provided document, the system responds:
 
-```text
+```
 I could not find the answer in the provided document.
 ```
 
@@ -374,17 +362,17 @@ Use local embeddings to reduce unnecessary API usage.
 
 ## Future Improvements
 
-- Multi-document conversations
-- Chat history
-- Streaming responses
-- Source highlighting
-- Authentication
-- User accounts
-- Hybrid keyword and semantic search
-- Advanced retrieval strategies
-- Document management
-- Cloud deployment
-- RAG evaluation metrics
+* Multi-document conversations
+* Chat history
+* Streaming responses
+* Source highlighting
+* Authentication
+* User accounts
+* Hybrid keyword and semantic search
+* Advanced retrieval strategies
+* Document management
+* Cloud deployment
+* RAG evaluation metrics
 
 ---
 
@@ -392,7 +380,7 @@ Use local embeddings to reduce unnecessary API usage.
 
 **Muhammad Owais Shabbir**
 
-[![GitHub](https://img.shields.io/badge/GitHub-buildbyowais-181717?logo=github&logoColor=white)](https://github.com/buildbyowais)
+[![GitHub](https://img.shields.io/badge/GitHub-buildbyowais-181717?logo=github\&logoColor=white)](https://github.com/buildbyowais)
 
 ---
 
