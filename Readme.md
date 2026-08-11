@@ -386,4 +386,4 @@ Use local embeddings to reduce unnecessary API usage.
 
 ## License
 
-This project is developed for educational and project purposes.
+This project is developed for educational and project purposes only.
