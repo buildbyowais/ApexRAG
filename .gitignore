@@ -6,6 +6,3 @@ rag_env/
 chroma_db/
 uploads/
 *.log
-.DS_Store
-.vscode/
-.idea/
