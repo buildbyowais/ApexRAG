@@ -1,6 +1,30 @@
+from functools import lru_cache
+
 from .retriever import retrieve_documents
 from .prompt import prompt
 from .llm import get_llm
+
+
+@lru_cache(maxsize=100)
+def _cached_answer(
+    question: str,
+    document_id: str,
+    context: str
+):
+
+    llm = get_llm()
+
+    messages = prompt.format_messages(
+        context=context,
+        question=question
+    )
+
+    response = llm.invoke(messages)
+
+    if isinstance(response.content, list):
+        return response.content[0]["text"]
+
+    return response.content
 
 
 def ask_question(question: str, document_id: str):
@@ -23,19 +47,11 @@ def ask_question(question: str, document_id: str):
 
     try:
 
-        llm = get_llm()
-
-        messages = prompt.format_messages(
-            context=context,
-            question=question
+        answer = _cached_answer(
+            question=question.strip(),
+            document_id=document_id,
+            context=context
         )
-
-        response = llm.invoke(messages)
-
-        if isinstance(response.content, list):
-            answer = response.content[0]["text"]
-        else:
-            answer = response.content
 
     except Exception as e:
 
@@ -58,7 +74,6 @@ def ask_question(question: str, document_id: str):
             "sources": [],
             "error": "llm_error"
         }
-
 
     # Sources
     sources = []
@@ -86,7 +101,6 @@ def ask_question(question: str, document_id: str):
             })
 
             seen_sources.add(source_key)
-
 
     return {
         "answer": answer,
