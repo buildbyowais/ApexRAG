@@ -1,5 +1,4 @@
-import torch
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 
 _embedding_model = None
@@ -11,17 +10,9 @@ def get_embedding_model():
 
     if _embedding_model is None:
 
-        torch.set_num_threads(4)
-
-        _embedding_model = HuggingFaceEmbeddings(
-            model_name="sentence-transformers/all-MiniLM-L6-v2",
-            model_kwargs={
-                "device": "cpu"
-            },
-            encode_kwargs={
-                "normalize_embeddings": True,
-                "batch_size": 32
-            }
+        _embedding_model = GoogleGenerativeAIEmbeddings(
+            model="gemini-embedding-2",
+            output_dimensionality=768
         )
 
     return _embedding_model
