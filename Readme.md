@@ -1,53 +1,48 @@
+
 # ApexRAG
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3.x-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI">
-  <img src="https://img.shields.io/badge/LangChain-1C3C3C?style=for-the-badge" alt="LangChain">
-  <img src="https://img.shields.io/badge/Google%20Gemini-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="Google Gemini">
-  <img src="https://img.shields.io/badge/ChromaDB-Vector%20Store-FF6F00?style=for-the-badge" alt="ChromaDB">
-  <img src="https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap">
-</p>
+A document-grounded Retrieval-Augmented Generation (RAG) chatbot that allows users to upload their own documents and ask questions about their content.
 
-<p align="center">
-  <b>Document-grounded RAG chatbot for asking questions from your own documents.</b>
-</p>
+ApexRAG processes uploaded documents, creates vector embeddings, stores them in ChromaDB, retrieves relevant document chunks, and uses Google Gemini to generate answers grounded in the uploaded document.
 
 ---
 
-## Overview
+## 🚀 Live Demo
 
-**ApexRAG** is a document-based Retrieval-Augmented Generation (RAG) chatbot built with **FastAPI, LangChain, Google Gemini, Hugging Face embeddings, and ChromaDB**.
+### Frontend
+https://apexrag.netlify.app/
 
-Users can upload a document and immediately ask questions about its content. The system processes the document, creates vector embeddings, stores the resulting chunks in ChromaDB, retrieves relevant context for each question, and generates a concise answer grounded in the uploaded document.
+### Backend API
+https://apexrag.onrender.com/
 
-If the required information cannot be found in the document, ApexRAG refuses to invent an answer.
+### API Documentation
+https://apexrag.onrender.com/docs
 
 ---
 
 ## ✨ Features
 
-- 📄 Upload **PDF, DOCX, and TXT** files
-- 📦 Maximum upload size of **20 MB**
-- 🧹 Text cleaning and preprocessing
+- 📄 Upload PDF, DOCX, and TXT documents
+- 🧹 Document text cleaning and preprocessing
 - 🧩 Intelligent document chunking
-- 🏷️ Metadata enrichment for document chunks
-- 🔎 Semantic similarity search
-- 🧠 Local Hugging Face embeddings
+- 🏷️ Metadata enrichment
+- 🔢 Vector embeddings using Google Gemini Embeddings
 - 🗄️ ChromaDB vector storage
+- 🔎 Semantic similarity search
 - 🤖 Google Gemini for answer generation
 - 🎯 Document-grounded answers
-- 🛡️ Basic hallucination/refusal handling
-- 📚 Source and page references
-- ✂️ Concise responses to reduce unnecessary token usage
+- 🛡️ Basic hallucination handling
+- 📚 Document and page source references
 - 💬 Interactive chat interface
 - 📱 Responsive frontend
 - ⚡ FastAPI REST API
 - 📖 Swagger/OpenAPI documentation
+- 🌐 Netlify frontend deployment
+- ☁️ Render backend deployment
 
 ---
 
-## 🏗️ Architecture
+# 🏗️ Architecture
 
 ```text
                          ┌─────────────────┐
@@ -57,119 +52,220 @@ If the required information cannot be found in the document, ApexRAG refuses to 
                                   ▼
                     ┌─────────────────────────┐
                     │        Frontend         │
-                    │ HTML + CSS + JS +       │
-                    │       Bootstrap         │
+                    │    HTML + CSS + JS      │
+                    │        Bootstrap        │
                     └────────────┬────────────┘
                                  │
                                  ▼
                     ┌─────────────────────────┐
                     │        FastAPI          │
-                    │        Backend          │
+                    │        Backend           │
                     └────────────┬────────────┘
                                  │
-                  ┌──────────────┴──────────────┐
-                  │                             │
-                  ▼                             ▼
-        ┌──────────────────┐          ┌──────────────────┐
-        │    Ingestion     │          │    Retrieval     │
-        ├──────────────────┤          ├──────────────────┤
-        │ Load             │          │ Query Processing │
-        │ Clean            │          │ Retrieval        │
-        │ Structure        │          │ Prompting        │
-        │ Chunk            │          │ LLM Generation   │
-        │ Metadata         │          └────────┬─────────┘
-        │ Embeddings       │                   │
-        └────────┬─────────┘                   │
-                 │                             │
-                 ▼                             │
-        ┌──────────────────┐                   │
-        │     ChromaDB     │◄──────────────────┘
-        │   Vector Store   │
-        └──────────────────┘
-                       │
-                       ▼
-               Answer + Sources
-```
+                   ┌─────────────┴─────────────┐
+                   │                           │
+                   ▼                           ▼
+          ┌──────────────────┐        ┌──────────────────┐
+          │    Ingestion     │        │    Retrieval     │
+          ├──────────────────┤        ├──────────────────┤
+          │ Load             │        │ Query Embedding  │
+          │ Clean            │        │ Similarity Search│
+          │ Structure        │        │ Context Building │
+          │ Chunk            │        │ Prompting        │
+          │ Metadata         │        │ Gemini LLM       │
+          │ Embeddings       │        └────────┬─────────┘
+          └────────┬─────────┘                 │
+                   │                           │
+                   ▼                           │
+          ┌──────────────────┐                 │
+          │     ChromaDB     │◄────────────────┘
+          │   Vector Store   │
+          └──────────────────┘
+                   │
+                   ▼
+             Answer + Sources
+````
 
 ---
 
-## 🔄 How ApexRAG Works
+# 🔄 How It Works
 
-### 1. Upload
+## 1. Document Upload
 
-The user uploads a PDF, DOCX, or TXT document from the frontend.
-
-### 2. Ingestion
-
-The uploaded document goes through the ingestion pipeline:
+The user uploads a PDF, DOCX, or TXT document through the frontend.
 
 ```text
 Document
    │
    ▼
-Load
+Upload
    │
    ▼
-Clean
-   │
-   ▼
-Structure Detection
-   │
-   ▼
-Chunking
-   │
-   ▼
-Metadata Enrichment
-   │
-   ▼
-Embeddings
-   │
-   ▼
-ChromaDB
+Load Document
 ```
-
-### 3. Question
-
-The user asks a question related to the uploaded document.
-
-### 4. Retrieval
-
-ApexRAG searches the vector store for the most relevant document chunks.
-
-```text
-User Question
-     │
-     ▼
-Question Embedding
-     │
-     ▼
-Semantic Search
-     │
-     ▼
-Relevant Chunks
-```
-
-### 5. Generation
-
-The retrieved context is passed to Google Gemini together with the question.
-
-```text
-Question + Retrieved Context
-              │
-              ▼
-         Google Gemini
-              │
-              ▼
-         Final Answer
-```
-
-### 6. Sources
-
-The response includes the document and page information associated with the retrieved content.
 
 ---
 
-## 📁 Project Structure
+## 2. Document Ingestion
+
+The document passes through the ingestion pipeline:
+
+```text
+Load
+  │
+  ▼
+Clean
+  │
+  ▼
+Structure Detection
+  │
+  ▼
+Chunking
+  │
+  ▼
+Metadata Enrichment
+  │
+  ▼
+Gemini Embeddings
+  │
+  ▼
+ChromaDB
+```
+
+Each chunk is converted into a vector representation and stored in ChromaDB together with its metadata.
+
+---
+
+## 3. Question
+
+The user asks a question about the uploaded document.
+
+```text
+User Question
+      │
+      ▼
+Question Embedding
+      │
+      ▼
+Semantic Similarity Search
+      │
+      ▼
+Relevant Document Chunks
+```
+
+---
+
+## 4. Retrieval
+
+ApexRAG searches ChromaDB for the most relevant chunks using semantic similarity.
+
+The retrieved documents are filtered using the document ID so that the answer remains associated with the correct uploaded document.
+
+---
+
+## 5. Answer Generation
+
+The retrieved context and user's question are passed to Google Gemini.
+
+```text
+Question + Retrieved Context
+             │
+             ▼
+       Google Gemini
+             │
+             ▼
+        Final Answer
+```
+
+The model is instructed to answer using the provided document context rather than relying on unsupported information.
+
+---
+
+## 6. Sources
+
+The response also includes the source document name and page number for the retrieved content.
+
+Example:
+
+```json
+{
+  "answer": "The purpose of recruitment is ...",
+  "sources": [
+    {
+      "file_name": "document.pdf",
+      "page": 1
+    }
+  ]
+}
+```
+
+---
+
+# 🧠 Embedding Architecture
+
+ApexRAG uses Google's Gemini Embeddings through LangChain.
+
+```python
+GoogleGenerativeAIEmbeddings(
+    model="gemini-embedding-2",
+    output_dimensionality=768
+)
+```
+
+The embedding model is initialized using a singleton-style approach:
+
+```python
+_embedding_model = None
+```
+
+The model is created only when required and then reused.
+
+This avoids unnecessarily recreating the embedding model object during the application's lifetime.
+
+---
+
+# 🤖 LLM
+
+Google Gemini is used for final answer generation.
+
+The application uses:
+
+```text
+Model: gemini-3.5-flash
+Temperature: 0
+```
+
+A temperature of `0` is used to make responses more consistent and focused on the retrieved document context.
+
+---
+
+# 🗄️ Vector Database
+
+ApexRAG uses **ChromaDB** as its vector store.
+
+ChromaDB stores:
+
+* Document chunks
+* Vector embeddings
+* Document metadata
+* Document IDs
+* Source information
+
+The application uses a persistent ChromaDB directory:
+
+```text
+./chroma_db
+```
+
+The collection used by the application is:
+
+```text
+rag_documents
+```
+
+---
+
+# 📁 Project Structure
 
 ```text
 ApexRAG/
@@ -200,128 +296,75 @@ ApexRAG/
 │
 ├── chroma_db/
 │
+├── uploads/
+│
 ├── main.py
 ├── requirements.txt
-├── .env
+├── .env.example
 └── .gitignore
 ```
 
 ---
 
-## 🧰 Tech Stack
+# 🧰 Tech Stack
 
-| Technology | Role |
-|---|---|
-| Python | Core backend language |
-| FastAPI | REST API and backend |
-| LangChain | RAG and LLM orchestration |
-| Google Gemini | Answer generation |
-| Hugging Face | Embedding model |
-| Sentence Transformers | Local text embeddings |
-| ChromaDB | Vector database |
-| HTML | Frontend structure |
-| CSS | Frontend styling |
-| JavaScript | Frontend logic |
-| Bootstrap | UI framework |
+| Technology        | Purpose                       |
+| ----------------- | ----------------------------- |
+| Python            | Backend programming language  |
+| FastAPI           | REST API and backend          |
+| LangChain         | RAG and LLM orchestration     |
+| Google Gemini     | Answer generation             |
+| Gemini Embeddings | Document and query embeddings |
+| ChromaDB          | Vector database               |
+| PyMuPDF           | PDF document processing       |
+| python-docx       | DOCX processing               |
+| HTML              | Frontend structure            |
+| CSS               | Frontend styling              |
+| JavaScript        | Frontend functionality        |
+| Bootstrap         | UI components                 |
+| Netlify           | Frontend deployment           |
+| Render            | Backend deployment            |
 
 ---
 
-## 📄 Supported Documents
+# 📄 Supported Documents
 
 | Format | Supported |
-|---|---|
-| PDF | ✅ |
-| DOCX | ✅ |
-| TXT | ✅ |
+| ------ | --------- |
+| PDF    | ✅         |
+| DOCX   | ✅         |
+| TXT    | ✅         |
 
-**Maximum file size:** `20 MB`
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-Make sure you have:
-
-- Python 3.x
-- pip
-- A Google Gemini API key
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/buildbyowais/ApexRAG.git
-cd ApexRAG
-```
-
-### 2. Create a Virtual Environment
-
-```bash
-python -m venv rag_env
-```
-
-### 3. Activate the Environment
-
-**Windows**
-
-```bash
-rag_env\Scripts\activate
-```
-
-**Linux / macOS**
-
-```bash
-source rag_env/bin/activate
-```
-
-### 4. Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 5. Configure Environment Variables
-
-Create a `.env` file in the project root:
-
-```env
-GOOGLE_API_KEY=your_api_key_here
-```
-
-> Keep your `.env` file private. It should not be committed to GitHub.
-
-### 6. Start the Backend
-
-```bash
-uvicorn main:app --reload
-```
-
-The API will be available at:
+Maximum upload size:
 
 ```text
-http://127.0.0.1:8000
-```
-
-Swagger documentation:
-
-```text
-http://127.0.0.1:8000/docs
+20 MB
 ```
 
 ---
 
-## 🔌 API
+# 🔌 API Endpoints
 
-### Upload Document
+## Upload Document
 
 ```http
 POST /documents/upload
 ```
 
-The endpoint accepts a document, processes it through the ingestion pipeline, generates embeddings, and stores the chunks in ChromaDB.
+Uploads and processes a document.
 
-Example response:
+The endpoint:
+
+1. Saves the uploaded document
+2. Loads its content
+3. Cleans the text
+4. Detects structure
+5. Creates chunks
+6. Adds metadata
+7. Generates embeddings
+8. Stores vectors in ChromaDB
+
+### Example Response
 
 ```json
 {
@@ -332,13 +375,15 @@ Example response:
 }
 ```
 
-### Ask a Question
+---
+
+## Ask a Question
 
 ```http
 POST /chat
 ```
 
-Request:
+### Request
 
 ```json
 {
@@ -347,11 +392,11 @@ Request:
 }
 ```
 
-Example response:
+### Response
 
 ```json
 {
-  "answer": "The purpose of recruitment is to formulate a team of competent candidates from which the company can select the best employee.",
+  "answer": "The purpose of recruitment is to ...",
   "sources": [
     {
       "file_name": "document.pdf",
@@ -363,58 +408,89 @@ Example response:
 
 ---
 
-## 🛡️ Hallucination Handling
+# 🛡️ Hallucination Handling
 
-ApexRAG is designed to keep answers grounded in the uploaded document.
+ApexRAG is designed to keep generated answers grounded in the uploaded document.
 
-When the requested information is not available in the retrieved document context, the system returns:
+If the relevant information cannot be found in the retrieved document context, the system returns:
 
 ```text
 I could not find the answer in the provided document.
 ```
 
-This prevents the chatbot from presenting unsupported information as if it came from the uploaded document.
+This prevents the system from presenting unsupported information as if it came from the uploaded document.
 
 ---
 
-## 🎯 Design Goals
+# ⚡ Efficiency
 
-### Accuracy
-Retrieve relevant document context before generating an answer.
+ApexRAG is designed to minimize unnecessary processing and API usage.
 
-### Grounding
-Keep responses tied to the uploaded document.
+The application separates:
 
-### Conciseness
-Return useful answers without unnecessary long explanations.
+```text
+Document Processing
+        ↓
+Embedding
+        ↓
+Vector Storage
+        ↓
+Retrieval
+        ↓
+LLM Generation
+```
 
-### Transparency
-Show the document and page sources used for the response.
+Document embeddings are generated during ingestion and stored in ChromaDB.
 
-### Efficiency
-Use local embeddings while using the LLM primarily for final answer generation.
+When a user asks a question, the application retrieves relevant chunks instead of sending the entire document to the LLM.
+
+Only the retrieved context is passed to Gemini for answer generation.
 
 ---
 
-## 🧪 Testing
+# 🧪 Testing
 
-ApexRAG can be tested using several question types:
+ApexRAG can be tested using different types of questions.
 
-### Direct Questions
+### 1. Direct Questions
 
-Questions whose answers are explicitly present in the document.
+Questions whose answers are explicitly available in the document.
 
-### Comparative Questions
+Example:
 
-Questions requiring information from multiple sections.
+```text
+What is the main purpose of the organization?
+```
 
-### Medium-Length Questions
+### 2. Comparative Questions
 
-Questions requiring several relevant chunks to construct an answer.
+Questions requiring information from different sections.
 
-### Hallucination Tests
+Example:
+
+```text
+What is the difference between recruitment and selection?
+```
+
+### 3. Contextual Questions
+
+Questions requiring multiple retrieved chunks.
+
+Example:
+
+```text
+Explain the process described in the document.
+```
+
+### 4. Hallucination Tests
 
 Questions about information that does not exist in the uploaded document.
+
+Example:
+
+```text
+What was the company's revenue in 2020?
+```
 
 Expected behavior:
 
@@ -424,31 +500,188 @@ I could not find the answer in the provided document.
 
 ---
 
-## 🔮 Future Improvements
+# 🌐 Deployment
 
-- Multi-document conversations
-- Persistent chat history
-- Streaming responses
-- Source highlighting
-- Better chunk-level citations
-- Hybrid keyword + semantic retrieval
-- Reranking
-- Authentication and user accounts
-- Document management
-- Cloud deployment
-- RAG evaluation metrics
-- Conversation memory
+## Frontend
+
+The frontend is deployed using:
+
+```text
+Netlify
+```
+
+Live frontend:
+
+```text
+https://apexrag.netlify.app/
+```
+
+The frontend contains:
+
+```text
+index.html
+style.css
+script.js
+```
 
 ---
 
-## 👨‍💻 Author
+## Backend
+
+The FastAPI backend is deployed using:
+
+```text
+Render
+```
+
+Backend:
+
+```text
+https://apexrag.onrender.com/
+```
+
+Swagger documentation:
+
+```text
+https://apexrag.onrender.com/docs
+```
+
+---
+
+# 🔐 Environment Variables
+
+Create a `.env` file:
+
+```env
+GOOGLE_API_KEY=your_google_api_key
+```
+
+The API key is used for Google Gemini services.
+
+> Never commit your `.env` file to GitHub.
+
+---
+
+# 🚀 Local Setup
+
+## 1. Clone the Repository
+
+```bash
+git clone https://github.com/buildbyowais/ApexRAG.git
+cd ApexRAG
+```
+
+## 2. Create Virtual Environment
+
+```bash
+python -m venv rag_env
+```
+
+## 3. Activate Environment
+
+### Windows
+
+```bash
+rag_env\Scripts\activate
+```
+
+### Linux / macOS
+
+```bash
+source rag_env/bin/activate
+```
+
+## 4. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+## 5. Configure Environment
+
+Create `.env`:
+
+```env
+GOOGLE_API_KEY=your_api_key_here
+```
+
+## 6. Start Backend
+
+```bash
+uvicorn main:app --reload
+```
+
+Backend:
+
+```text
+http://127.0.0.1:8000
+```
+
+Swagger:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+---
+
+# 🎯 Design Goals
+
+### Accuracy
+
+Retrieve relevant document chunks before generating an answer.
+
+### Grounding
+
+Keep answers based on the uploaded document.
+
+### Conciseness
+
+Generate useful answers without unnecessary content.
+
+### Transparency
+
+Provide source document and page information.
+
+### Efficiency
+
+Store document embeddings in ChromaDB and retrieve only relevant context for each question.
+
+### Simplicity
+
+Keep the application focused on document-based question answering without unnecessary features.
+
+---
+
+# 🔮 Future Improvements
+
+Possible future improvements include:
+
+* Multi-document conversations
+* Persistent chat history
+* Streaming responses
+* Source highlighting
+* Better chunk-level citations
+* Hybrid keyword + semantic retrieval
+* Reranking
+* Authentication and user accounts
+* Document management
+* Conversation memory
+* RAG evaluation metrics
+* Improved deployment infrastructure
+
+---
+
+# 👨‍💻 Author
 
 **Muhammad Owais Shabbir**
 
-[![GitHub](https://img.shields.io/badge/GitHub-buildbyowais-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/buildbyowais)
+GitHub:
+
+[https://github.com/buildbyowais](https://github.com/buildbyowais)
 
 ---
 
-## 📜 License
+# 📜 License
 
 This project was developed for educational and project purposes.
