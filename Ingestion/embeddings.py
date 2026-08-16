@@ -12,7 +12,7 @@ def get_embedding_model():
 
         _embedding_model = GoogleGenerativeAIEmbeddings(
             model="gemini-embedding-2",
-            output_dimensionality=768
+            output_dimensionality=384
         )
 
     return _embedding_model
